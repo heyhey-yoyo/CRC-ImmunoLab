@@ -85,3 +85,5 @@ html,body,#app{font-size:15px}
 .schedule-label,.summary-chip span,.inspect-metric span,.queue-table th,.data-table th{font-size:12.5px;color:var(--muted2)}
 .field-help,.preset-btn small,.chart-legend,.chart-tab,.cell-key,.diagnostic-item p{font-size:13px}
 @media(max-width:600px){.topbar{padding:0 12px}.brand{min-width:0;flex:1}.top-actions{gap:4px}.top-actions button{padding:0 8px;font-size:13px}}
+.brand-mark{background:var(--ink) url("../assets/project-mark.svg") center/100% 100% no-repeat}
+.brand-mark svg{display:none}
