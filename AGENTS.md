@@ -8,6 +8,7 @@
 
 - 零运行时依赖，单文件应用，可零构建静态部署（Cloudflare Pages 等）。
 - 当前交付为单文件构建产物 `index.html`；`source-extracted/` 是从中提取的源码，仅供阅读与审查，不是独立可运行的工程。
+- 页面主体采用 `ydchen-portfolio` 的米白 / 赤陶色视觉令牌；保持研究工作台结构、交互和可视化语义不变。修改 `index.html` 内联样式时必须同步 `source-extracted/styles.css`。
 
 ### 科学边界（不可违反）
 
