@@ -33,6 +33,16 @@ python -m http.server 8080
 
 打开 `http://localhost:8080`。
 
+## 自动验收
+
+无需安装依赖即可运行：
+
+```bash
+node --test tests/static-smoke.test.mjs
+```
+
+该检查覆盖工作台入口、关键控件、响应式样式与 Cloudflare 安全头；数值模型与导入导出流程仍按页面手动回归。
+
 ## 部署
 
 站点文件位于仓库根目录，可零构建直接发布。Cloudflare Pages 连接 Git 仓库后：

@@ -22,6 +22,7 @@
 - `index.html`：唯一可部署入口，包含全部内联 CSS/JS 与内嵌 Worker（通过 Blob URL 实例化）。
 - `source-extracted/`：从 `index.html` 提取的 JavaScript/CSS，供代码阅读与二次审查，不参与部署。
 - `_headers`：Cloudflare Pages 安全响应头（CSP、nosniff、权限策略等）。
+- `tests/static-smoke.test.mjs`：零依赖静态验收（入口、关键控件、响应式样式、安全头、重复 ID）。
 - `README.md`、`AGENTS.md`：项目说明与 AI 代理指南。
 
 ## 技术栈与运行架构
@@ -57,7 +58,7 @@ cd d:/AI/Github/CRC-ImmunoLab
 python -m http.server 8080
 ```
 
-打开 `http://localhost:8080`。无自动化测试套件；任何改动后建议手动验证：批量运行结果、配对比较、时间序列第 0 天基线、导入安全（恶意 JSON 应被拒绝）、CSV 导出往返、空间页重复进入无资源堆积、跨页面项目恢复。
+打开 `http://localhost:8080`。可先运行 `node --test tests/static-smoke.test.mjs` 检查页面入口、固定控件、响应式样式与安全头；任何改动后仍建议手动验证：批量运行结果、配对比较、时间序列第 0 天基线、导入安全（恶意 JSON 应被拒绝）、CSV 导出往返、空间页重复进入无资源堆积、跨页面项目恢复。
 
 ## 部署约定
 
