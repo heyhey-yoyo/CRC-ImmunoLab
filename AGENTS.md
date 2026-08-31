@@ -16,15 +16,6 @@
 - 本项目是**机制探索、教学与定性假设比较工具**，不可用于临床预测、患者分层或治疗决策。任何输出、指标或文案都不得暗示临床用途。
 - 模型为统计与空间代理近似，指标如"效应细胞不足指数"仅为模型内比例指标，不得暗示经过生物学验证。
 
-## 仓库结构
-
-- 仓库根目录即站点根目录（`index.html`、`_headers` 直接在根目录，可零构建发布）。
-- `index.html`：唯一可部署入口，包含全部内联 CSS/JS 与内嵌 Worker（通过 Blob URL 实例化）。
-- `source-extracted/`：从 `index.html` 提取的 JavaScript/CSS，供代码阅读与二次审查，不参与部署。
-- `_headers`：Cloudflare Pages 安全响应头（CSP、nosniff、权限策略等）。
-- `tests/static-smoke.test.mjs`：零依赖静态验收（入口、关键控件、响应式样式、安全头、重复 ID）。
-- `README.md`、`AGENTS.md`：项目说明与 AI 代理指南。
-
 ## 技术栈与运行架构
 
 - 纯 HTML + CSS + 原生 JavaScript（IIFE 命名空间 `CRC3`），无框架、无构建步骤、无运行时依赖。
@@ -33,6 +24,15 @@
 - 批量 Worker（`batch.worker.js`）：批量随机机制模型，逐 replicate 运行、按 replicate ID 做配对比较，产出"优于对照概率"等统计。
 - 空间 Worker（`spatial.worker.js`）：空间代理模型，模拟细胞扩散场、免疫浸润、治疗给药与肿瘤动态。
 - 存储：OPFS 为主，LocalStorage 与内存会话三级回退；最近项目索引写入 OPFS，避免对 LocalStorage 的单点依赖。
+
+## 项目结构
+
+- 仓库根目录即站点根目录（`index.html`、`_headers` 直接在根目录，可零构建发布）。
+- `index.html`：唯一可部署入口，包含全部内联 CSS/JS 与内嵌 Worker（通过 Blob URL 实例化）。
+- `source-extracted/`：从 `index.html` 提取的 JavaScript/CSS，供代码阅读与二次审查，不参与部署。
+- `_headers`：Cloudflare Pages 安全响应头（CSP、nosniff、权限策略等）。
+- `tests/static-smoke.test.mjs`：零依赖静态验收（入口、关键控件、响应式样式、安全头、重复 ID）。
+- `README.md`、`AGENTS.md`：项目说明与 AI 代理指南。
 
 ## 核心不变量（改动时保持）
 
@@ -68,7 +68,7 @@ python -m http.server 8080
 
 ## 版本管理约定
 
-- **版本号以 GitHub Release 为准**（当前 v1.0.0）；页面不显示版本号（顶栏、Model pill、KPI 均已移除版本显示）。
+- **版本号以 GitHub Release 为准**（当前 v1.0.0）；页面不显示版本号。
 - 代码内版本常量（`CRC3.VERSION`、Worker 的 `MODEL_VERSION`）必须与最新 Release 对齐。
 - 发布新 Release 时无需修改页面；如需修改版本常量，同步更新本文件与 README 的"当前版本"说明。
 
@@ -80,6 +80,10 @@ python -m http.server 8080
 - 文档与交付物以中文为主；代码标识符保持英文。
 - 提交前确认 `index.html` 可正常打开、无外部资源依赖（CSP 不允许外站脚本）。
 
+## 标志维护约定
+
+项目标志采用统一的深灰方章、米白线条与赤陶色识别点，页面标志与 favicon 共用同一 `project-mark.svg`。后续替换必须保持原标志容器宽高，不得借机改变页眉、网格或页面布局。
+
 ---
 
 ## AI 维护提醒
@@ -89,8 +93,3 @@ python -m http.server 8080
 > - 修改随机种子、时间轴或给药逻辑时，必须保持配对种子与第 0 天基线不变量，并同步更新 README 与 AGENTS
 > - 修改 `index.html` 后必须同步更新 `source-extracted/` 提取源码
 > - 动态渲染不可信文本时必须编码，禁止 `innerHTML` 直插
-
-
-## 标志维护约定
-
-项目标志采用统一的深灰方章、米白线条与赤陶色识别点，页面标志与 favicon 共用同一 `project-mark.svg`。后续替换必须保持原标志容器宽高，不得借机改变页眉、网格或页面布局。
