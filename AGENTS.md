@@ -19,7 +19,7 @@
 ## 技术栈与运行架构
 
 - 纯 HTML + CSS + 原生 JavaScript（IIFE 命名空间 `CRC3`），无框架、无构建步骤、无运行时依赖。
-- `CRC3.VERSION = '1.0.0'`，治疗臂配色定义在 `CRC3.ARM_COLORS`。
+- `CRC3.VERSION` 为应用版本常量，取值与最新 GitHub Release 对齐；治疗臂配色定义在 `CRC3.ARM_COLORS`。
 - 主线程：`app.js` 负责 UI、研究设计、分析展示、存储与导出。
 - 批量 Worker（`batch.worker.js`）：批量随机机制模型，逐 replicate 运行、按 replicate ID 做配对比较，产出「优于对照概率」等统计。
 - 空间 Worker（`spatial.worker.js`）：空间代理模型，模拟细胞扩散场、免疫浸润、治疗给药与肿瘤动态。
@@ -44,7 +44,6 @@
 ## 运行与构建
 
 ```bash
-cd d:/AI/Github/CRC-ImmunoLab
 python -m http.server 8080
 ```
 
@@ -124,6 +123,8 @@ index.html 是可部署权威入口，与 source-extracted 对应源码同步。
 ## 标志维护约定
 
 项目标志采用统一的深灰方章、米白线条与赤陶色识别点，页面标志与 favicon 共用同一 `assets/project-mark.svg`。后续替换必须保持原标志容器宽高，不得借机改变页眉、网格或页面布局。
+
+---
 
 ## AI 维护提醒
 
