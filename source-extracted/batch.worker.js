@@ -1,5 +1,5 @@
 const METRICS = ['tumor', 'cytotoxic', 'infiltration', 'exhaustion', 'hypoxia', 'suppression', 'drug'];
-const MODEL_VERSION = '1.0.0';
+const MODEL_VERSION = '1.0.1';
 const MAX_RUNS = 4500;
 function clamp(v, lo = 0, hi = 1) { return Math.max(lo, Math.min(hi, v)); }
 function mulberry32(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -36,6 +36,8 @@ function applyScan(config, value) {
 }
 function runOne(base, arm, replicate, seed, scanValue) {
     const config = applyScan(base, scanValue), rng = mulberry32(seed), uncertainty = config.uncertainty / 100;
+    arm = config.arms.find(candidate => candidate.id === arm.id);
+    if (!arm) throw new Error('扫描配置缺少治疗臂');
     const variation = (scale = 1) => 1 + normal(rng) * uncertainty * scale;
     let tumor = 1, cd8 = (config.cd8Count / 100) * variation(.55), nk = (config.nkCount / 70) * variation(.6), treg = (config.tregCount / 70) * variation(.55), caf = (config.cafCount / 85) * variation(.45);
     let exhaustion = clamp((config.preset === 'mss_cold' ? .38 : config.preset === 'suppressive' ? .48 : .25) * variation(.35), 0, .8);
@@ -131,7 +133,7 @@ self.onmessage = (event) => {
         const referenceScanValue = config.scan.enabled ? scanValues[Math.floor(scanValues.length / 2)] : null;
         const baseRuns = config.scan.enabled ? runs.filter(run => run.scanValue === referenceScanValue).map(run => ({ ...run, scanValue: null })) : runs;
         const result = {
-            id: msg.studyId, name: config.name, createdAt: msg.createdAt, completedAt: new Date().toISOString(), modelVersion: MODEL_VERSION, config, runs,
+            id: msg.studyId, name: config.name, createdAt: msg.createdAt, completedAt: new Date().toISOString(), modelVersion: MODEL_VERSION, applicationVersion: msg.applicationVersion || 'unknown', configFingerprint: msg.configFingerprint || null, config, runs,
             aggregates: aggregate(baseRuns, arms), durationMs: performance.now() - started,
             diagnostics: ['治疗臂与扫描点按 replicate index 使用共同随机种子', '时间序列从未处理的第 0 天基线开始', '第 0 天给药与后续计划均按半开时间区间处理', '所有概率与状态变量保持在定义范围内', '批量结果使用 5%–95% 分位区间', config.scan.enabled ? `参数扫描基准统计取中间扫描值 ${referenceScanValue}` : '未启用参数扫描']
         };

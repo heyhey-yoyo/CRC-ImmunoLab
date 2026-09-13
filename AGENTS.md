@@ -36,7 +36,7 @@
 | `_headers` | Cloudflare Pages 安全响应头（CSP、nosniff、权限策略等） |
 | `assets/project-mark.svg` | 页面标志与 favicon 共用图形 |
 | `assets/icon.svg` | 界面图标 |
-| `tests/static-smoke.test.mjs` | 零依赖静态验收（入口、关键控件、响应式样式、安全头、重复 ID） |
+| `tests/static-smoke.test.mjs` | 零依赖静态验收（入口、关键控件、响应式样式、安全头、重复 ID、四份提取源码一致性、导出报告标题、药物扫描有效性及版本溯源回归） |
 | `LICENSE` | MIT 许可证 |
 | `.gitignore` | Git 忽略规则 |
 | `README.md`、`AGENTS.md` | 项目说明与 AI 代理指南 |
@@ -51,7 +51,7 @@ python -m http.server 8080
 
 ## 测试
 
-运行 `node --test tests/static-smoke.test.mjs` 检查页面入口、固定控件、响应式样式与安全头；任何改动后仍建议手动验证：批量运行结果、配对比较、时间序列第 0 天基线、导入安全（恶意 JSON 应被拒绝）、CSV 导出往返、空间页重复进入无资源堆积、跨页面项目恢复。
+运行 `node --test tests/static-smoke.test.mjs` 检查页面入口、固定控件、响应式样式、安全头、重复 ID、四份提取源码一致性、导出报告标题、药物扫描有效性及版本溯源回归；任何改动后仍建议手动验证：批量运行结果、配对比较、时间序列第 0 天基线、导入安全（恶意 JSON 应被拒绝）、CSV 导出往返、空间页重复进入无资源堆积、跨页面项目恢复。
 
 发布检查：
 
@@ -60,6 +60,8 @@ node --test tests/static-smoke.test.mjs
 ```
 
 ## 代码组织与风格约定
+
+发布时同步权威入口 `index.html` 与提取副本 `source-extracted/app.js` 的 `CRC3.VERSION`；版本溯源回归按当前常量匹配，不固定旧补丁号。`BATCH_MODEL_VERSION`、Worker `MODEL_VERSION` 与 `SPATIAL_MODEL_VERSION` 保持各自科学模型语义。研究报告与模型卡标题仅使用产品名，版本放在各自元数据中。
 
 ### 品牌与排版
 
@@ -79,6 +81,9 @@ index.html 是可部署权威入口，与 source-extracted 对应源码同步。
 
 ### 核心不变量（改动时保持）
 
+- 药物扫描必须从 `applyScan` 返回配置中按 `arm.id` 选择治疗臂，不能读取扫描前日程；关闭的药物不受该扫描影响。研究级保存应用版本、批量模型版本与配置指纹；运行通过所属研究配置、治疗臂和扫描值复现。导入缺失版本标为 `unknown`，不伪造为当前版本；重新计算归一化配置指纹并保留输入指纹。
+- 区间为运行样本的经验分位区间，不是均值置信区间。
+
 - 配对随机种子：不同治疗臂的同一 replicate 使用相同基础种子，聚合按 replicate ID 显式匹配，不得混入全局计数。
 - 时间轴：先记录未处理的第 0 天基线，再按半开区间 `[t, t+dt)` 处理给药；到达终点日不再额外更新。
 - 确定性：随机数基于 `mulberry32` 固定种子；相同模型版本、配置与种子必须产生相同结果。
@@ -97,7 +102,7 @@ index.html 是可部署权威入口，与 source-extracted 对应源码同步。
 ### 版本管理约定
 
 - **版本号以 GitHub Release 为准**；页面不显示版本号。
-- 应用版本常量 `CRC3.VERSION` 与应用发布版本保持一致；Worker 的 `MODEL_VERSION` 按科学模型行为独立演进。
+- 应用版本常量 `CRC3.VERSION` 与应用发布版本保持一致；批量 Worker 的 `MODEL_VERSION` 与 `CRC3.BATCH_MODEL_VERSION` 保持一致，按批量科学模型行为独立演进；`CRC3.SPATIAL_MODEL_VERSION` 独立标识空间模型。协议与模型卡分别导出应用及两种模型版本，不以应用版本冒充模型版本。
 - 发布新 Release 时无需修改页面；修改版本常量时与最新 Release 对齐。
 
 ### 工作约定

@@ -11,4 +11,4 @@
 
 ## 同步维护
 
-修改脚本、ARM_COLORS、画布尺寸或响应式样式时，必须同步根 index.html 与本目录对应内容。紧凑布局断点为 1120px，超窄屏表单单列；页面整页滚动，品牌页眉随页面滚走。根目录 node --test tests/static-smoke.test.mjs 检查源码一致性及静态入口。完整约定见 [AGENTS.md](../AGENTS.md)。
+修改脚本、ARM_COLORS、画布尺寸或响应式样式时，必须同步根 index.html 与本目录对应内容。紧凑布局断点为 1120px，超窄屏表单单列；页面整页滚动，品牌页眉随页面滚走。根目录 node --test tests/static-smoke.test.mjs 逐份比对应用脚本、两个 Worker 与 CSS 的实际内容（仅归一化换行及首尾空白），并检查静态入口、导出报告标题、实际消息入口药物扫描与版本溯源。完整约定见 [AGENTS.md](../AGENTS.md)。
