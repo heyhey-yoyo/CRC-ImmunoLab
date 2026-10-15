@@ -7,7 +7,7 @@
 **CRC ImmunoLab** 是一个纯前端、本地优先的肿瘤免疫空间计算研究工具，用于结直肠癌治疗方案的机制探索、批量实验设计与不确定性分析。随机种子配对、第 0 天给药时间轴、导入校验与项目恢复均须保持对应的模型和存储约束。
 
 - 零运行时依赖，单文件应用，可零构建静态部署（Cloudflare Pages 等）。
-- 当前交付为自包含单文件 `index.html`；`source-extracted/` 是从中提取的源码，仅供阅读与审查，不是独立可运行的工程。
+- 当前交付为单文件入口 `index.html`（内联全部样式与脚本，Worker 以 Blob 方式内嵌，仅引用本地 `assets/project-mark.svg`）；`source-extracted/` 是从中提取的源码，仅供阅读与审查，不是独立可运行的工程。
 - 页面主体采用 `ydchen-portfolio` 的米白 / 赤陶色视觉令牌；保持研究工作台结构、交互和可视化语义不变。修改 `index.html` 内联样式时必须同步 `source-extracted/styles.css`。
 - 视觉验收需保持正文 16px、操作标签不小于 12px，提示框满足浅色背景对比度，并在 1440px 桌面与 390px 手机视口检查全局横向溢出。
 
@@ -51,7 +51,7 @@ python -m http.server 8080
 
 ## 测试
 
-运行 `node --test tests/static-smoke.test.mjs` 检查页面入口、固定控件、响应式样式、安全头、重复 ID、四份提取源码一致性、导出报告标题、药物扫描有效性及版本溯源回归；任何改动后仍建议手动验证：批量运行结果、配对比较、时间序列第 0 天基线、导入安全（恶意 JSON 应被拒绝）、CSV 导出往返、空间页重复进入无资源堆积、跨页面项目恢复。
+运行 `node --test tests/static-smoke.test.mjs` 检查页面入口、固定控件、响应式样式、安全头、重复 ID、四份提取源码一致性、导出报告标题、药物扫描有效性及版本溯源回归；任何改动后仍建议手动验证：批量运行结果、配对比较、时间序列第 0 天基线、导入安全（恶意 JSON 应被拒绝）、CSV 导出与单研究 JSON 导入导出往返、空间页重复进入无资源堆积、跨页面项目恢复。
 
 发布检查：
 
@@ -114,7 +114,7 @@ index.html 是可部署权威入口，与 source-extracted 对应源码同步。
 
 ## 部署
 
-- Cloudflare Pages（零配置）：Framework preset 选 None，Build command 留空，Build output directory 留空，根目录即站点根目录。
+- Cloudflare Pages（项目 `crc-immunolab`，Git 集成，零配置）：Framework preset 选 None，Build command 留空，Build output directory 留空，根目录即站点根目录。
 - 安全响应头来自根目录 `_headers`；`index.html` 内置兼容离线模式的 meta CSP（`worker-src blob:` 已明确放行）。
 - 不要引入需要后端的特性；若未来加入 Pages Functions 或 `_worker.js`，静态 `_headers` 不会自动覆盖函数响应，需要在函数代码中设置安全响应头。
 
@@ -134,6 +134,6 @@ index.html 是可部署权威入口，与 source-extracted 对应源码同步。
 
 > **⚠️ 任何修改此项目的 AI 代理（包括未来的你自己）都必须遵守：**
 >
-> - 修改随机种子、时间轴或给药逻辑时，必须保持配对种子与第 0 天基线不变量，并同步更新 README 与 AGENTS
+> - 修改随机种子、时间轴或给药逻辑时，必须保持配对种子与第 0 天基线不变量，并同步更新 [README.md](./README.md) 与 AGENTS
 > - 修改 `index.html` 后必须同步更新 `source-extracted/` 提取源码
 > - 动态渲染不可信文本时必须编码，禁止 `innerHTML` 直插

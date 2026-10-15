@@ -43,7 +43,7 @@ python -m http.server 8080
 
 对外版本以 GitHub Release 为准；新研究记录实际运行的应用版本，已归档研究保留原始溯源。批量与空间模型分别使用独立模型版本，不随应用补丁自动改号。
 
-站点文件位于仓库根目录，可零构建直接发布。Cloudflare Pages 连接 Git 仓库后：
+站点文件位于仓库根目录，可零构建直接发布。Cloudflare Pages 项目 `crc-immunolab` 已接入 Git 集成，推送 `main` 分支即自动部署；首次连接 Git 仓库后：
 
 - Framework preset：None
 - Build command：留空（无构建）
