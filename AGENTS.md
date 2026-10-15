@@ -32,10 +32,10 @@
 | 文件 | 作用 |
 | --- | --- |
 | `index.html` | 唯一可部署入口，包含全部内联 CSS/JS 与内嵌 Worker（通过 Blob URL 实例化） |
-| `source-extracted/` | 从 `index.html` 提取的 JavaScript/CSS，供代码阅读与二次审查，不参与部署 |
+| `source-extracted/` | 从 `index.html` 提取的 JavaScript/CSS 与说明 `README.md`，供代码阅读与二次审查，不参与部署 |
 | `_headers` | Cloudflare Pages 安全响应头（CSP、nosniff、权限策略等） |
 | `assets/project-mark.svg` | 页面标志与 favicon 共用图形 |
-| `assets/icon.svg` | 界面图标 |
+| `assets/icon.svg` | 备用图标（当前未被部署入口引用） |
 | `tests/static-smoke.test.mjs` | 零依赖静态验收（入口、关键控件、响应式样式、安全头、重复 ID、四份提取源码一致性、导出报告标题、药物扫描有效性及版本溯源回归） |
 | `LICENSE` | MIT 许可证 |
 | `.gitignore` | Git 忽略规则 |
@@ -61,7 +61,7 @@ node --test tests/static-smoke.test.mjs
 
 ## 代码组织与风格约定
 
-发布时同步权威入口 `index.html` 与提取副本 `source-extracted/app.js` 的 `CRC3.VERSION`；版本溯源回归按当前常量匹配，不固定旧补丁号。`BATCH_MODEL_VERSION`、Worker `MODEL_VERSION` 与 `SPATIAL_MODEL_VERSION` 保持各自科学模型语义。研究报告与模型卡标题仅使用产品名，版本放在各自元数据中。
+发布时同步权威入口 `index.html` 与提取副本 `source-extracted/app.js` 的 `CRC3.VERSION`；版本溯源回归按当前常量匹配，不固定旧补丁号。`CRC3.BATCH_MODEL_VERSION`、Worker `MODEL_VERSION` 与 `CRC3.SPATIAL_MODEL_VERSION` 保持各自科学模型语义。研究报告与模型卡标题仅使用产品名，版本放在各自元数据中。
 
 ### 品牌与排版
 
